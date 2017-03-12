@@ -145,5 +145,7 @@ class TextBuffer:
     def save(self, file_path):
         with open(file_path, 'w', 'utf-8') as f:
             self.changed = False
-            for line in self.buffer:
-                f.write("".join(line).replace("\t" * TAB_SIZE, "\t") + '\n')
+            for i, line in enumerate(self.buffer):
+                f.write("".join(line).replace("\t" * TAB_SIZE, "\t"))
+                if i != len(self.buffer) -1:
+                    f.write("\n")
