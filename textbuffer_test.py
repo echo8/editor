@@ -2,6 +2,7 @@
 
 import unittest
 
+from conf import *
 from textbuffer import TextBuffer, DeleteType
 
 
@@ -94,6 +95,24 @@ class DeleteTestCases(TextBufferTestCase):
         self.assertEqual(self.tb.cursor_pos, [0, 5])
         self.assertEqual(self.tb.cursor_col, 5)
 
+    def test_delete_tab(self):
+        self.tb.buffer = [['H', 'e'] + list("\t" * TAB_SIZE) + ['l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2 + TAB_SIZE]
+        self.tb.cursor_col = 2 + TAB_SIZE
+        self.tb.delete()
+        self.assertEqual(self.tb.buffer, [['H', 'e', 'l', 'l', 'o']])
+        self.assertEqual(self.tb.cursor_pos, [0, 2])
+        self.assertEqual(self.tb.cursor_col, 2)
+
+    def test_delete_forward_tab(self):
+        self.tb.buffer = [['H', 'e'] + list("\t" * TAB_SIZE) + ['l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.delete(dt=DeleteType.FORWARD)
+        self.assertEqual(self.tb.buffer, [['H', 'e', 'l', 'l', 'o']])
+        self.assertEqual(self.tb.cursor_pos, [0, 2])
+        self.assertEqual(self.tb.cursor_col, 2)
+
 
 class CursorMovementTestCases(TextBufferTestCase):
     def test_cursor_left_on_empty(self):
@@ -126,6 +145,14 @@ class CursorMovementTestCases(TextBufferTestCase):
         self.assertEqual(self.tb.cursor_pos, [0, 5])
         self.assertEqual(self.tb.cursor_col, 5)
 
+    def test_cursor_left_with_tab(self):
+        self.tb.buffer = [['H', 'e'] + list("\t" * TAB_SIZE) + ['l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2 + TAB_SIZE]
+        self.tb.cursor_col = 2 + TAB_SIZE
+        self.tb.cursor_left()
+        self.assertEqual(self.tb.cursor_pos, [0, 2])
+        self.assertEqual(self.tb.cursor_col, 2)
+
     def test_cursor_right_on_empty(self):
         self.tb.cursor_right()
         self.assertEqual(self.tb.cursor_pos, [0, 0])
@@ -155,6 +182,14 @@ class CursorMovementTestCases(TextBufferTestCase):
         self.tb.cursor_right()
         self.assertEqual(self.tb.cursor_pos, [1, 0])
         self.assertEqual(self.tb.cursor_col, 0)
+
+    def test_cursor_right_with_tab(self):
+        self.tb.buffer = [['H', 'e'] + list("\t" * TAB_SIZE) + ['l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_right()
+        self.assertEqual(self.tb.cursor_pos, [0, 2 + TAB_SIZE])
+        self.assertEqual(self.tb.cursor_col, 2 + TAB_SIZE)
 
     def test_cursor_down_on_empty(self):
         self.tb.cursor_down()
@@ -186,6 +221,21 @@ class CursorMovementTestCases(TextBufferTestCase):
         self.assertEqual(self.tb.cursor_pos, [2, 5])
         self.assertEqual(self.tb.cursor_col, 5)
 
+    def test_cursor_down_in_middle_of_tab(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l'], ['W'] + list("\t" * TAB_SIZE) + ['o', 'r']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_down()
+        self.assertEqual(self.tb.cursor_pos, [1, 1])
+        self.assertEqual(self.tb.cursor_col, 2)
+
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l'], ['W'] + list("\t" * TAB_SIZE) + ['o', 'r']]
+        self.tb.cursor_pos = [0, 1 + TAB_SIZE - 1]
+        self.tb.cursor_col = 1 + TAB_SIZE - 1
+        self.tb.cursor_down()
+        self.assertEqual(self.tb.cursor_pos, [1, 1 + TAB_SIZE])
+        self.assertEqual(self.tb.cursor_col, 1 + TAB_SIZE - 1)
+
     def test_cursor_up_on_empty(self):
         self.tb.cursor_up()
         self.assertEqual(self.tb.cursor_pos, [0, 0])
@@ -215,6 +265,21 @@ class CursorMovementTestCases(TextBufferTestCase):
         self.tb.cursor_up()
         self.assertEqual(self.tb.cursor_pos, [0, 5])
         self.assertEqual(self.tb.cursor_col, 5)
+
+    def test_cursor_up_in_middle_of_tab(self):
+        self.tb.buffer = [['W'] + list("\t" * TAB_SIZE) + ['o', 'r'], ['H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l']]
+        self.tb.cursor_pos = [1, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_up()
+        self.assertEqual(self.tb.cursor_pos, [0, 1])
+        self.assertEqual(self.tb.cursor_col, 2)
+
+        self.tb.buffer = [['W'] + list("\t" * TAB_SIZE) + ['o', 'r'], ['H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l']]
+        self.tb.cursor_pos = [1, 1 + TAB_SIZE - 1]
+        self.tb.cursor_col = 1 + TAB_SIZE - 1
+        self.tb.cursor_up()
+        self.assertEqual(self.tb.cursor_pos, [0, 1 + TAB_SIZE])
+        self.assertEqual(self.tb.cursor_col, 1 + TAB_SIZE - 1)
 
     def test_cursor_to_line_begin_on_empty(self):
         self.tb.cursor_to_line_begin()

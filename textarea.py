@@ -49,9 +49,9 @@ class TextArea:
         window_surface = self.window.get_surface()
         y = self.window_border[0]
         for i in range(self.line_start, min(self.line_end + 1, len(self.text_buffer.buffer))):
+            line_txt = "".join(self.text_buffer.buffer[i]).replace("\t", " ")
             self.font.render_on(window_surface,
-                                "".join(self.text_buffer.buffer[i][self.ch_start:min(self.ch_end + 1,
-                                                                                     len(self.text_buffer.buffer[i]))]),
+                                line_txt[self.ch_start:min(self.ch_end + 1, len(self.text_buffer.buffer[i]))],
                                 offset=(self.window_border[3], y))
             y += (self.font.size[1] + self.line_spacing)
 
@@ -83,5 +83,7 @@ class TextArea:
                     self.text_buffer.cursor_to_line_begin()
                 elif event.key.keysym.sym == sdl2.SDLK_END:
                     self.text_buffer.cursor_to_line_end()
+                elif event.key.keysym.sym == sdl2.SDLK_TAB:
+                    self.text_buffer.insert("\t" * TAB_SIZE)
             elif event.type == sdl2.SDL_TEXTINPUT:
                 self.text_buffer.insert(event.text.text)
