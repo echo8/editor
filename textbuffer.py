@@ -12,6 +12,7 @@ class TextBuffer:
     def __init__(self, text=None):
         self.buffer = [[] if text is None else list(text)]
         self.cursor_pos = [0, len(self.buffer[0])]
+        self.cursor_col = self.cursor_pos[1]
         self.changed = True
 
     def insert(self, text):
@@ -19,6 +20,7 @@ class TextBuffer:
             self.buffer[self.cursor_pos[0]].insert(self.cursor_pos[1], c)
             self.cursor_pos[1] += 1
         self.changed = True
+        self.cursor_col = self.cursor_pos[1]
 
     def delete(self, dt=DeleteType.BACK):
         if dt == DeleteType.BACK:
@@ -37,34 +39,39 @@ class TextBuffer:
                 self.buffer[self.cursor_pos[0]] += self.buffer[self.cursor_pos[0] + 1]
                 del self.buffer[self.cursor_pos[0] + 1]
         self.changed = True
+        self.cursor_col = self.cursor_pos[1]
 
     def cursor_left(self):
         if self.cursor_pos[1] > 0:
             self.cursor_pos[1] -= 1
         elif self.cursor_pos[0] > 0:
             self.cursor_pos = [self.cursor_pos[0] - 1, len(self.buffer[self.cursor_pos[0] - 1])]
+        self.cursor_col = self.cursor_pos[1]
 
     def cursor_right(self):
         if self.cursor_pos[1] < len(self.buffer[self.cursor_pos[0]]):
             self.cursor_pos[1] += 1
         elif self.cursor_pos[0] < len(self.buffer) - 1:
             self.cursor_pos = [self.cursor_pos[0] + 1, 0]
+        self.cursor_col = self.cursor_pos[1]
 
     def cursor_down(self):
         if self.cursor_pos[0] < len(self.buffer) - 1:
             self.cursor_pos = [self.cursor_pos[0] + 1,
-                               min(self.cursor_pos[1], len(self.buffer[self.cursor_pos[0] + 1]))]
+                               min(self.cursor_col, len(self.buffer[self.cursor_pos[0] + 1]))]
 
     def cursor_up(self):
         if self.cursor_pos[0] > 0:
             self.cursor_pos = [self.cursor_pos[0] - 1,
-                               min(self.cursor_pos[1], len(self.buffer[self.cursor_pos[0] - 1]))]
+                               min(self.cursor_col, len(self.buffer[self.cursor_pos[0] - 1]))]
 
     def cursor_to_line_begin(self):
         self.cursor_pos[1] = 0
+        self.cursor_col = self.cursor_pos[1]
 
     def cursor_to_line_end(self):
         self.cursor_pos[1] = len(self.buffer[self.cursor_pos[0]])
+        self.cursor_col = self.cursor_pos[1]
 
     def newline(self):
         self.buffer.insert(self.cursor_pos[0] + 1,
@@ -72,6 +79,7 @@ class TextBuffer:
         self.buffer[self.cursor_pos[0]] = self.buffer[self.cursor_pos[0]][:self.cursor_pos[1]]
         self.cursor_pos = [self.cursor_pos[0] + 1, 0]
         self.changed = True
+        self.cursor_col = self.cursor_pos[1]
 
     def get_value(self):
         return "".join(self.buffer[0])
