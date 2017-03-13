@@ -14,8 +14,9 @@ class Editor:
 
 
 class EditorState:
-    def __init__(self, editor):
+    def __init__(self, editor, update_only=True):
         self.editor = editor
+        self.update_only = update_only
 
     def changed(self):
         return self.editor.text_area.text_buffer.changed
@@ -28,9 +29,10 @@ class EditorState:
                 else:
                     return QuitState(self.editor)
         state = self.handle_input(events)
-        sdl2.SDL_Delay(10)
-        self.draw()
-        self.editor.window.refresh()
+        if not self.update_only:
+            sdl2.SDL_Delay(10)
+            self.draw()
+            self.editor.window.refresh()
         return state
 
     def handle_input(self, events):

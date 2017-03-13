@@ -341,5 +341,73 @@ class NewlineTestCases(TextBufferTestCase):
         self.assertEqual(self.tb.cursor_col, 0)
 
 
+class ChangedTestCases(TextBufferTestCase):
+    def test_changed_on_start(self):
+        self.assertFalse(self.tb.changed)
+
+    def test_changed_on_insert(self):
+        self.tb.insert("Hello")
+        self.assertTrue(self.tb.changed)
+
+    def test_changed_on_delete(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.delete()
+        self.assertTrue(self.tb.changed)
+
+    def test_changed_on_forward_delete(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.delete(dt=DeleteType.FORWARD)
+        self.assertTrue(self.tb.changed)
+
+    def test_changed_on_newline(self):
+        self.tb.newline()
+        self.assertTrue(self.tb.changed)
+
+    def test_changed_on_cursor_left(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_left()
+        self.assertFalse(self.tb.changed)
+
+    def test_changed_on_cursor_right(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_right()
+        self.assertFalse(self.tb.changed)
+
+    def test_changed_on_cursor_down(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o'], ['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_down()
+        self.assertFalse(self.tb.changed)
+
+    def test_changed_on_cursor_up(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o'], ['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [1, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_up()
+        self.assertFalse(self.tb.changed)
+
+    def test_changed_on_cursor_to_line_begin(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_to_line_begin()
+        self.assertFalse(self.tb.changed)
+
+    def test_changed_on_cursor_to_line_end(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.cursor_to_line_end()
+        self.assertFalse(self.tb.changed)
+
 if __name__ == "__main__":
     unittest.main()
