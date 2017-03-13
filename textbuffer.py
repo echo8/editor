@@ -14,7 +14,7 @@ class TextBuffer:
         self.buffer = [[] if text is None else list(text)]
         self.cursor_pos = [0, len(self.buffer[0])]
         self.cursor_col = self.cursor_pos[1]
-        self.changed = True
+        self.changed = False
 
     def insert(self, text):
         for c in text:
