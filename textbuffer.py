@@ -147,5 +147,5 @@ class TextBuffer:
             self.changed = False
             for i, line in enumerate(self.buffer):
                 f.write("".join(line).replace("\t" * TAB_SIZE, "\t"))
-                if i != len(self.buffer) -1:
+                if i != len(self.buffer) - 1:
                     f.write("\n")

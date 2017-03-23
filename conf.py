@@ -8,8 +8,7 @@ from os.path import abspath, dirname, join
 WINDOW_TITLE = "Editor"
 WINDOW_SIZE = (320, 260)
 
-FONT_IMG_FILENAME = "font.bmp"
-FONT_IMG_PATH = join(dirname(abspath(getsourcefile(lambda: 0))), "resources", FONT_IMG_FILENAME)
+FONT_IMG_PATH = join(dirname(abspath(getsourcefile(lambda: 0))), "resources", "font.bmp")
 FONT_SIZE = (7, 9)
 FONT_MAPPING = [" !\"#$%&'()*+,-./01",
                 "23456789:;<=>?@ABC",
