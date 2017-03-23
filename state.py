@@ -14,7 +14,7 @@ class Editor:
 
 
 class EditorState:
-    def __init__(self, editor, update_only=True):
+    def __init__(self, editor, update_only=False):
         self.editor = editor
         self.update_only = update_only
 
