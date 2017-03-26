@@ -63,9 +63,13 @@ def run():
     sdl2.SDL_StartTextInput()
 
     while True:
+        start = sdl2.SDL_GetTicks()
         state = state.update(sdl2.ext.get_events())
         if state is None:
             break
+        ticks = sdl2.SDL_GetTicks() - start
+        if ticks < 1000 / FRAMES_PER_SECOND:
+            sdl2.SDL_Delay((1000 / FRAMES_PER_SECOND) - ticks)
 
     sdl2.SDL_StopTextInput()
     sdl2.ext.quit()

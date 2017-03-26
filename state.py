@@ -30,7 +30,6 @@ class EditorState:
                     return QuitState(self.editor)
         state = self.handle_input(events)
         if not self.update_only:
-            sdl2.SDL_Delay(10)
             self.draw()
             self.editor.window.refresh()
         return state

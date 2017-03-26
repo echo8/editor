@@ -17,7 +17,7 @@ class StatusBar:
         self.height = font.size[1] + border[0] + border[2]
         self.width = window.size[0]
         self.msg = None
-        self.msg_timeout = None
+        self.msg_start = None
         self.input = None
         self.input_label = None
 
@@ -35,12 +35,12 @@ class StatusBar:
                             offset=(self.window.size[0] - ((self.font.size[0] * len(text)) + self.border[1]),
                                     sb_y + self.border[0]))
 
-        if self.msg_timeout is not None and sdl2.SDL_GetTicks() < self.msg_timeout:
+        if self.msg_start is not None and sdl2.SDL_GetTicks() - self.msg_start < STATUS_BAR_MSG_DURATION:
             self.font.render_on(window_surface,
                                 self.msg,
                                 offset=(self.border[1], self.window.size[1] - self.height + self.border[0]))
-        elif self.msg_timeout is not None:
-            self.msg_timeout = None
+        elif self.msg_start is not None:
+            self.msg_start = None
 
     def init_input(self, label, text=None):
         self.input_label = label
@@ -66,6 +66,6 @@ class StatusBar:
     def handle_input(self, events):
         self.input.handle_input(events)
 
-    def display_msg(self, msg, duration=STATUS_BAR_MSG_DURATION):
+    def display_msg(self, msg):
         self.msg = msg
-        self.msg_timeout = sdl2.SDL_GetTicks() + duration
+        self.msg_start = sdl2.SDL_GetTicks()

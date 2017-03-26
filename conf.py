@@ -17,6 +17,8 @@ FONT_MAPPING = [" !\"#$%&'()*+,-./01",
                 "hijklmnopqrstuvwxy",
                 "z{|}~"]
 
+FRAMES_PER_SECOND = 30
+
 TAB_SIZE = 4
 
 COLOR_KEY_R = 0
