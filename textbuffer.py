@@ -1,6 +1,5 @@
 # coding=utf-8
 
-from codecs import open
 from conf import *
 
 
@@ -131,7 +130,7 @@ class TextBuffer:
         return "".join(self.buffer[0])
 
     def load(self, file_path):
-        with open(file_path, 'r', 'utf-8') as f:
+        with open(file_path, 'r') as f:
             self.buffer = []
             self.changed = False
             for line in f:
@@ -143,7 +142,7 @@ class TextBuffer:
                 self.buffer.append([])
 
     def save(self, file_path):
-        with open(file_path, 'w', 'utf-8') as f:
+        with open(file_path, 'w') as f:
             self.changed = False
             for i, line in enumerate(self.buffer):
                 f.write("".join(line).replace("\t" * TAB_SIZE, "\t"))
