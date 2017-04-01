@@ -3,7 +3,7 @@
 import sdl2.ext
 
 from conf import *
-from textbuffer import DeleteType
+from textbuffer import DELETE_FORWARD
 
 
 class TextArea:
@@ -70,7 +70,7 @@ class TextArea:
                 elif event.key.keysym.sym == sdl2.SDLK_BACKSPACE:
                     self.text_buffer.delete()
                 elif event.key.keysym.sym == sdl2.SDLK_DELETE:
-                    self.text_buffer.delete(dt=DeleteType.FORWARD)
+                    self.text_buffer.delete(dt=DELETE_FORWARD)
                 elif event.key.keysym.sym == sdl2.SDLK_UP:
                     self.text_buffer.cursor_up()
                 elif event.key.keysym.sym == sdl2.SDLK_DOWN:

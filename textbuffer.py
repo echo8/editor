@@ -2,10 +2,8 @@
 
 from conf import *
 
-
-class DeleteType:
-    BACK = 1
-    FORWARD = 2
+DELETE_BACK = 1
+DELETE_FORWARD = 2
 
 
 class TextBuffer:
@@ -22,8 +20,8 @@ class TextBuffer:
         self.changed = True
         self.cursor_col = self.cursor_pos[1]
 
-    def delete(self, dt=DeleteType.BACK):
-        if dt == DeleteType.BACK:
+    def delete(self, dt=DELETE_BACK):
+        if dt == DELETE_BACK:
             if self.cursor_pos[1] > 0:
                 if self.buffer[self.cursor_pos[0]][self.cursor_pos[1] - 1] != "\t":
                     del self.buffer[self.cursor_pos[0]][self.cursor_pos[1] - 1]

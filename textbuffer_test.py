@@ -3,7 +3,7 @@
 import unittest
 
 from conf import *
-from textbuffer import TextBuffer, DeleteType
+from textbuffer import TextBuffer, DELETE_FORWARD
 
 
 class TextBufferTestCase(unittest.TestCase):
@@ -72,7 +72,7 @@ class DeleteTestCases(TextBufferTestCase):
         self.assertEqual(self.tb.cursor_col, 5)
 
     def test_delete_forward_on_empty(self):
-        self.tb.delete(dt=DeleteType.FORWARD)
+        self.tb.delete(dt=DELETE_FORWARD)
         self.assertEqual(self.tb.buffer, [[]])
         self.assertEqual(self.tb.cursor_pos, [0, 0])
         self.assertEqual(self.tb.cursor_col, 0)
@@ -81,7 +81,7 @@ class DeleteTestCases(TextBufferTestCase):
         self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
         self.tb.cursor_pos = [0, 2]
         self.tb.cursor_col = 2
-        self.tb.delete(dt=DeleteType.FORWARD)
+        self.tb.delete(dt=DELETE_FORWARD)
         self.assertEqual(self.tb.buffer, [['H', 'e', 'l', 'o']])
         self.assertEqual(self.tb.cursor_pos, [0, 2])
         self.assertEqual(self.tb.cursor_col, 2)
@@ -90,7 +90,7 @@ class DeleteTestCases(TextBufferTestCase):
         self.tb.buffer = [['H', 'e', 'l', 'l', 'o'], ['W', 'o', 'r', 'l', 'd']]
         self.tb.cursor_pos = [0, 5]
         self.tb.cursor_col = 5
-        self.tb.delete(dt=DeleteType.FORWARD)
+        self.tb.delete(dt=DELETE_FORWARD)
         self.assertEqual(self.tb.buffer, [['H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l', 'd']])
         self.assertEqual(self.tb.cursor_pos, [0, 5])
         self.assertEqual(self.tb.cursor_col, 5)
@@ -108,7 +108,7 @@ class DeleteTestCases(TextBufferTestCase):
         self.tb.buffer = [['H', 'e'] + list("\t" * TAB_SIZE) + ['l', 'l', 'o']]
         self.tb.cursor_pos = [0, 2]
         self.tb.cursor_col = 2
-        self.tb.delete(dt=DeleteType.FORWARD)
+        self.tb.delete(dt=DELETE_FORWARD)
         self.assertEqual(self.tb.buffer, [['H', 'e', 'l', 'l', 'o']])
         self.assertEqual(self.tb.cursor_pos, [0, 2])
         self.assertEqual(self.tb.cursor_col, 2)
@@ -360,7 +360,7 @@ class ChangedTestCases(TextBufferTestCase):
         self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
         self.tb.cursor_pos = [0, 2]
         self.tb.cursor_col = 2
-        self.tb.delete(dt=DeleteType.FORWARD)
+        self.tb.delete(dt=DELETE_FORWARD)
         self.assertTrue(self.tb.changed)
 
     def test_changed_on_newline(self):
