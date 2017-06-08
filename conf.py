@@ -9,13 +9,9 @@ WINDOW_TITLE = "Editor"
 WINDOW_SIZE = (320, 260)
 
 FONT_IMG_PATH = join(dirname(abspath(getsourcefile(lambda: 0))), "resources", "font.bmp")
-FONT_SIZE = (7, 9)
-FONT_MAPPING = [" !\"#$%&'()*+,-./01",
-                "23456789:;<=>?@ABC",
-                "DEFGHIJKLMNOPQRSTU",
-                "VWXYZ[\]^_`abcdefg",
-                "hijklmnopqrstuvwxy",
-                "z{|}~"]
+FONT_SIZE = (7, 14)
+FONT_MAPPING = [" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdef",
+                "ghijklmnopqrstuvwxyz{|}~"]
 
 FRAMES_PER_SECOND = 30
 
