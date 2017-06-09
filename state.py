@@ -46,6 +46,7 @@ class EditState(EditorState):
         EditorState.__init__(self, editor)
         self.ctrl = False
         self.shift = False
+        self.n = False
         self.o = False
         self.s = False
         self.q = False
@@ -57,6 +58,8 @@ class EditState(EditorState):
                     self.ctrl = True
                 elif event.key.keysym.sym == sdl2.SDLK_LSHIFT or event.key.keysym.sym == sdl2.SDLK_RSHIFT:
                     self.shift = True
+                elif event.key.keysym.sym == sdl2.SDLK_n:
+                    self.n = True
                 elif event.key.keysym.sym == sdl2.SDLK_o:
                     self.o = True
                 elif event.key.keysym.sym == sdl2.SDLK_s:
@@ -68,6 +71,8 @@ class EditState(EditorState):
                     self.ctrl = False
                 elif event.key.keysym.sym == sdl2.SDLK_LSHIFT or event.key.keysym.sym == sdl2.SDLK_RSHIFT:
                     self.shift = False
+                elif event.key.keysym.sym == sdl2.SDLK_n:
+                    self.n = False
                 elif event.key.keysym.sym == sdl2.SDLK_o:
                     self.o = False
                 elif event.key.keysym.sym == sdl2.SDLK_s:
@@ -79,6 +84,11 @@ class EditState(EditorState):
                 return SaveChangesState(self.editor, QuitState)
             else:
                 return QuitState(self.editor)
+        elif self.ctrl and self.n:
+            if self.changed():
+                return SaveChangesState(self.editor, NewState)
+            else:
+                return NewState(self.editor)
         elif self.ctrl and self.o:
             if self.changed():
                 return SaveChangesState(self.editor, OpenState)
@@ -187,3 +197,13 @@ class QuitState(EditorState):
 
     def update(self, events):
         return None
+
+
+class NewState(EditorState):
+    def __init__(self, editor):
+        EditorState.__init__(self, editor)
+
+    def update(self, events):
+        self.editor.file_path = None
+        self.editor.text_area.clear()
+        return EditState(self.editor)

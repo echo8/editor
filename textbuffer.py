@@ -127,6 +127,12 @@ class TextBuffer:
     def get_value(self):
         return "".join(self.buffer[0])
 
+    def clear(self):
+        self.buffer = [[]]
+        self.cursor_pos = [0, 0]
+        self.cursor_col = self.cursor_pos[1]
+        self.changed = False
+
     def load(self, file_path):
         with open(file_path, 'r') as f:
             self.buffer = []

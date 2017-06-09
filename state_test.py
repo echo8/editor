@@ -72,6 +72,12 @@ class EditTestCases(StateTestCase):
         res = self.state.update([get_key_down_event(sdl2.SDLK_RCTRL), get_key_down_event(sdl2.SDLK_q)])
         self.assertTrue(isinstance(res, QuitState))
 
+    def test_new(self):
+        res = self.state.update([get_key_down_event(sdl2.SDLK_LCTRL), get_key_down_event(sdl2.SDLK_n)])
+        self.assertTrue(isinstance(res, NewState))
+        res = self.state.update([get_key_down_event(sdl2.SDLK_RCTRL), get_key_down_event(sdl2.SDLK_n)])
+        self.assertTrue(isinstance(res, NewState))
+
     def test_open(self):
         res = self.state.update([get_key_down_event(sdl2.SDLK_LCTRL), get_key_down_event(sdl2.SDLK_o)])
         self.assertTrue(isinstance(res, OpenState))

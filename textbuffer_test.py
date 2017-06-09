@@ -409,5 +409,17 @@ class ChangedTestCases(TextBufferTestCase):
         self.tb.cursor_to_line_end()
         self.assertFalse(self.tb.changed)
 
+
+class ClearTestCases(TextBufferTestCase):
+    def test_clear(self):
+        self.tb.buffer = [['H', 'e', 'l', 'l', 'o']]
+        self.tb.cursor_pos = [0, 2]
+        self.tb.cursor_col = 2
+        self.tb.clear()
+        self.assertEqual(self.tb.buffer, [[]])
+        self.assertEqual(self.tb.cursor_pos, [0, 0])
+        self.assertEqual(self.tb.cursor_col, 0)
+        self.assertFalse(self.tb.changed)
+
 if __name__ == "__main__":
     unittest.main()

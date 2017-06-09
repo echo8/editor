@@ -87,3 +87,10 @@ class TextArea:
                     self.text_buffer.insert("\t" * TAB_SIZE)
             elif event.type == sdl2.SDL_TEXTINPUT:
                 self.text_buffer.insert(event.text.text)
+
+    def clear(self):
+        self.text_buffer.clear()
+        self.line_start = 0
+        self.line_end = self.get_line_count() - 1
+        self.ch_start = 0
+        self.ch_end = self.get_char_count() - 1
