@@ -130,6 +130,8 @@ class TextBuffer:
     def load(self, file_path):
         with open(file_path, 'r') as f:
             self.buffer = []
+            self.cursor_pos = [0, 0]
+            self.cursor_col = self.cursor_pos[1]
             self.changed = False
             for line in f:
                 l = []
