@@ -63,6 +63,20 @@ class TextArea:
         sdl2.ext.line(window_surface, TEXT_AREA_CURSOR_COLOR, (cursor_x1, cursor_y1, cursor_x2, cursor_y2))
 
     def handle_input(self, events):
+        focus_changed = False
+        alt = False
+        for event in events:
+            if event.type == sdl2.SDL_WINDOWEVENT:
+                if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_GAINED:
+                    focus_changed = True
+                elif event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
+                    focus_changed = True
+            elif event.type == sdl2.SDL_KEYDOWN:
+                if event.key.keysym.sym == sdl2.SDLK_LALT or event.key.keysym.sym == sdl2.SDLK_RALT:
+                    alt = True
+            elif event.type == sdl2.SDL_KEYUP:
+                if event.key.keysym.sym == sdl2.SDLK_LALT or event.key.keysym.sym == sdl2.SDLK_RALT:
+                    alt = True
         for event in events:
             if event.type == sdl2.SDL_KEYDOWN:
                 if event.key.keysym.sym == sdl2.SDLK_RETURN:
@@ -83,7 +97,7 @@ class TextArea:
                     self.text_buffer.cursor_to_line_begin()
                 elif event.key.keysym.sym == sdl2.SDLK_END:
                     self.text_buffer.cursor_to_line_end()
-                elif event.key.keysym.sym == sdl2.SDLK_TAB:
+                elif event.key.keysym.sym == sdl2.SDLK_TAB and not focus_changed and not alt:
                     self.text_buffer.insert("\t" * TAB_SIZE)
             elif event.type == sdl2.SDL_TEXTINPUT:
                 self.text_buffer.insert(event.text.text)
